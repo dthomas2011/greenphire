@@ -1,0 +1,89 @@
+/* Make one or more ajax calls to a json file (if you are comfortable
+setting up a webserver), or import a js file containing json that
+populate the following information:
+
+1. A panel (a div with a border is acceptable) with a dictionary list
+populating the data points “Event name”, “Event date”, “Event
+time”, “Event contact”.
+2. A simple table with 5 rows, and a header with the column
+headings “Last name”, “First name”, “Email”, “Phone number”,
+“Date of birth”. Please make up the data. */
+
+<div id="event" style="border: 1px solid black;">
+  <div id="name"></div>
+  <div id="date"></div>
+  <div id="time"></div>
+  <div id="contact"></div>
+</div>
+
+<div id="contacts"></div>
+
+<script>
+var request = new XMLHttpRequest();
+request.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        var json = JSON.parse(this.responseText);
+        
+        document.getElementById("name").innerHTML = json.eventName;
+        document.getElementById("date").innerHTML = json.eventDate;
+        document.getElementById("time").innerHTML = json.eventTime;
+        document.getElementById("contact").innerHTML = json.eventContact;
+        
+        txt = "<table>";
+        txt += "<tr><th>Last Name</th><th>First Name</th><th>Email</th><th>Phone Number</th><th>Date of birth</th></tr>";
+        for(var i=0;i<json.contacts.length;i++){
+			    txt += "<tr><td>" + json.contacts[i].lastName + "</td>";
+          txt += "<td>" + json.contacts[i].firstName + "</td>";
+          txt += "<td>" + json.contacts[i].email + "</td>";
+          txt += "<td>" + json.contacts[i].phone + "</td>";
+          txt += "<td>" + json.contacts[i].dob + "</td></tr>";
+		    }
+        txt += "</table>";
+        document.getElementById("contacts").innerHTML = txt;
+    }
+};
+xmlhttp.open("GET", "json.txt", true);
+xmlhttp.send();
+</script>
+
+
+// json.txt
+{
+  "eventName": "Fundraiser",
+  "eventDate": "October 17, 2017",
+  "eventTime": "7:00 PM",
+  "eventContact": "Derek Thomas, (123) 456-7890",
+  "contacts": [
+    {
+    "firstName": "Bob",
+    "lastName": "Vance",
+    "email": "bob@vance.com",
+    "phone": "1234567890",
+    "dob": "1/2/70"
+  },{
+    "firstName": "Alex",
+    "lastName": "Smith",
+    "email": "alex@smith.com",
+    "phone": "0987654321",
+    "dob": "4/15/88"
+  },{
+    "firstName": "Tom",
+    "lastName": "Smith",
+    "email": "tom@smith.com",
+    "phone": "1111111111",
+    "dob": "4/15/88"
+  },{
+    "firstName": "Amanda",
+    "lastName": "Miller",
+    "email": "amanda@miller.com",
+    "phone": "1112223333",
+    "dob": "6/10/78"
+  },{
+    "firstName": "Susan",
+    "lastName": "Jones",
+    "email": "susan@jones.com",
+    "phone": "1231231234",
+    "dob": "10/28/98"
+  }
+  ]
+}
